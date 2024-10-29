@@ -1,10 +1,11 @@
 package com.testproject.bookservice.service;
 
-import com.testproject.bookservice.dto.BookDto;
+import com.testproject.bookservice.client.LibraryFeignClient;
+import com.testproject.bookservice.dto.BookRequest;
+import com.testproject.bookservice.dto.BookResponse;
+import com.testproject.bookservice.exception.BookNotFoundException;
 import com.testproject.bookservice.model.Book;
 import com.testproject.bookservice.repository.BookRepository;
-import com.testproject.bookservice.client.LibraryFeignClient;
-import com.testproject.bookservice.exception.BookNotFoundException;
 import com.testproject.bookservice.util.mapper.BookMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,44 +25,41 @@ public class BookService {
     @Autowired
     private BookMapper bookMapper;
 
-    public Page<BookDto> getBooksPage(PageRequest pageRequest) {
+    public Page<BookResponse> getBooksPage(PageRequest pageRequest) {
         Page<Book> books = bookRepository.findAll(pageRequest);
-        return books.map(book -> bookMapper.toDto(book));
-//        return StreamSupport.stream(bookRepository.findAll().spliterator(),false)
-//                .map(bookMapper::toDto)
-//                .collect(Collectors.toList());
+        return books.map(book -> bookMapper.toBookResponse(book));
     }
 
-    public BookDto getBookById(Long id) {
+    public BookResponse getBookById(Long id) {
         Optional<Book> book = bookRepository.findById(id);
         if (book.isPresent()) {
-            return bookMapper.toDto(book.get());
+            return bookMapper.toBookResponse(book.get());
         } else {
             throw new BookNotFoundException("Book with id " + id + " not found");
         }
     }
 
-    public BookDto getBookByIsbn(String isbn) {
+    public BookResponse getBookByIsbn(String isbn) {
         Optional<Book> book = bookRepository.findByIsbn(isbn);
         if (book.isPresent()) {
-            return bookMapper.toDto(book.get());
+            return bookMapper.toBookResponse(book.get());
         } else {
             throw new BookNotFoundException("Book with isbn " + isbn + " not found");
         }
     }
 
-    public BookDto createBook(BookDto bookDto) {
-        Book book = bookMapper.toBook(bookDto);
+    public BookResponse createBook(BookRequest bookRequest) {
+        Book book = bookMapper.toBook(bookRequest);
         bookRepository.save(book);
         libraryFeignClient.createBookClaim(book.getId());
-        return bookMapper.toDto(book);
+        return bookMapper.toBookResponse(book);
     }
 
-    public BookDto updateBook(Long id, BookDto bookDto) {
-        Book updatedBook = bookMapper.toBook(bookDto);
+    public BookResponse updateBook(Long id, BookRequest bookRequest) {
+        Book updatedBook = bookMapper.toBook(bookRequest);
         if (bookRepository.findById(id).isPresent()) {
             updatedBook.setId(id);
-            return bookMapper.toDto(bookRepository.save(updatedBook));
+            return bookMapper.toBookResponse(bookRepository.save(updatedBook));
         }
         throw new BookNotFoundException("Book with id " + id + " not found");
     }
