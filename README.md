@@ -28,5 +28,7 @@
     docker-compose -f docker-compose.noservice.yml up -d
 6. Запустить сервисы api-gateway, eureka-server, book-service, library-service, identity-service
    
-## [Postman collection](https://www.postman.com/interstellar-space-469315/workspace/team-workspace/collection/32315386-f510b1d4-9e01-4ea5-af66-4acdd9816b16?action=share&creator=32315386) <- 
+## Postman (Collection Json)
+     https://api.postman.com/collections/32315386-f510b1d4-9e01-4ea5-af66-4acdd9816b16?access_key=PMAT-01JBEHSX5DF0H8Q1DHR4JWNRY4
+     
 ## [Swagger](http://localhost:8765/swagger-ui.html) <-
