@@ -33,12 +33,12 @@ public class LibraryService {
         return bookClaims.map(bookClaim -> bookClaimMapper.toBookClaimResponse(bookClaim));
     }
 
-    public BookClaimResponse getBookClaimByBookId(Long id) {
-        Optional<BookClaim> bookClaim = libraryRepository.getBookClaimByBookId(id);
+    public BookClaimResponse getBookClaimByBookId(Long bookId) {
+        Optional<BookClaim> bookClaim = libraryRepository.getBookClaimByBookId(bookId);
         if (bookClaim.isPresent()) {
             return bookClaimMapper.toBookClaimResponse(bookClaim.get());
         }
-        throw new BookClaimNotFoundException();
+        throw new BookClaimNotFoundException("Book claim with id " + bookId + " not found");
     }
 
     public BookClaimResponse createBookClaim(Long bookId) {
@@ -60,15 +60,14 @@ public class LibraryService {
             }
             throw new IncorrectDateException("Dates must be non-null");
         }
-        //TODO поменять
-        throw new BookClaimNotFoundException();
+        throw new BookClaimNotFoundException("Book claim with id " + bookId + " not found");
     }
 
-    public void deleteBookClaim(Long id) {
-        if (libraryRepository.getBookClaimByBookId(id).isPresent()) {
-            libraryRepository.deleteBookClaimByBookId(id);
+    public void deleteBookClaim(Long bookId) {
+        if (libraryRepository.getBookClaimByBookId(bookId).isPresent()) {
+            libraryRepository.deleteBookClaimByBookId(bookId);
         } else {
-            throw new BookClaimNotFoundException();
+            throw new BookClaimNotFoundException("Book claim with id " + bookId + " not found");
         }
     }
 }

@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BookClaimNotFoundException.class)
     public ResponseEntity<ErrorDetails> handleBookNotFoundException(BookClaimNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorDetails("Resource not found", null));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorDetails("Resource not found", Map.of("Error",ex.getMessage())));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
