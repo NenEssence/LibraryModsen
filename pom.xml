@@ -18,6 +18,7 @@
   <modules>
     <module>book-service</module>
     <module>library-service</module>
+    <module>eureka-server</module>
   </modules>
   <build>
     <finalName>LibraryModsen</finalName>
