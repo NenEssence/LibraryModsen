@@ -6,7 +6,6 @@ import lombok.Data;
 
 @Data
 public class BookRequest {
-    private Long id;
     @NotBlank(message = "Isbn is mandatory")
     @Pattern(regexp = "^97[89]\\d{10}$", message = "Incorrect ISBN-13 format")
     private String isbn;
