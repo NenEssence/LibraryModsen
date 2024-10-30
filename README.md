@@ -25,6 +25,5 @@
 4. Запустить docker-compose.noservice
    
     ```bash
-    docker-compose -f docker-compose.noservice.yml -d
-
+    docker-compose -f docker-compose.noservice.yml up -d
 6. Запустить сервисы api-gateway, eureka-server, book-service, library-service, identity-service
