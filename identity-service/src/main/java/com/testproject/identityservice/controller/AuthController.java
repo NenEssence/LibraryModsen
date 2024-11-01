@@ -5,6 +5,7 @@ import com.testproject.identityservice.model.UserCredential;
 import com.testproject.identityservice.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
@@ -20,19 +21,19 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/token")
-    public String getToken(@RequestBody AuthRequest authRequest) {
+    public ResponseEntity<String> getToken(@RequestBody AuthRequest authRequest) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
-        return service.generateToken(authRequest.getUsername());
+        return ResponseEntity.ok(service.generateToken(authRequest.getUsername()));
     }
 
     @GetMapping("/validate")
-    public String validateToken(@RequestParam("token") String token) {
-        service.validateToken(token);
-        return "Token is valid";
+    public ResponseEntity<String> validateToken(@RequestParam("token") String token) {
+
+        return ResponseEntity.ok(service.validateToken(token));
     }
 
     @PostMapping("/register")
-    public String addNewUser(@Valid @RequestBody UserCredential user) {
-        return service.saveUser(user);
+    public ResponseEntity<String> addNewUser(@Valid @RequestBody UserCredential user) {
+        return ResponseEntity.ok(service.saveUser(user));
     }
 }
